@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  .tracking-body{
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    width: 100%;
+    border-width: 2px;
+    border-color: white;
+    justify-content: center;
+  }
+  .tracking-banner{
+    font-family: consolas;
+    background-color: black;
+    color: grey;
+    transition: 1.4s;
+    width: 60%;
+    padding: 15px;
+    font-size: 112%;
+    border: none;
+    min-width: 20%;
+  }
+  .tracking-banner:hover{
+    color: white;
+    background-color: rgb(54, 255, 47);
+    flex-grow: 2;
+  }
+{% endblock %}
+
+{% block title_content %} Portfolio {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('index')}}"'>
+  Home
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('stocks')}}"'>Stocks</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  <div class='tracking-body'>
+    <button type="button" class='tracking-banner' onclick='location.href="{{url_for('tracking')}}"'>Tracking</button>
+    <button type="button" class="tracking-banner" onclick="location.href='{{url_for("preferences")}}'">Preferences</button>
+  </div>
+  <h1 class='topBanner'>{{user['Username']}}'s PORTFOLIO</h1>
+  <h3 class='topBanner'>Balance:{{balance}}</h3>
+  <table style = 'width: 100%'>
+        <tr>
+          <th>Stock Name</th>
+          <th>Ask Price</th>
+          <th>Bid Price</th>
+          <th>Shares</th>
+          <th>Sell</th>
+        </tr>
+        {% for stock in stocks %}
+        <tr>
+          <td onclick='location.href= "{{url_for('stock', stock_symbol=stock['Symbol'])}}"'>{{stock['Name']}}</td>
+          <td>{{stock['Ask']}}</td>
+          <td>{{stock['Bid']}}</td>
+          <td>{{stock['Shares']}}</td>
+          <td onclick='location.href= "{{url_for('sell', stock_symbol=stock['Symbol'], error_type='b')}}"'>Sell</td>
+        </tr>
+        {% endfor %}
+  </table>
+{% endblock %}
+{% block script_content %}
+{% endblock %}
+

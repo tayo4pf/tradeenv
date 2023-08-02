@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  .leaderboard-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    transition: 1s ease;
+    height: auto;
+  }
+  leaderboard-container:hover{
+    max-height: 300px;
+  }
+  .leaderboard-container:hover .leaderboard-overlay{
+    height:auto;
+  }
+  .leaderboard-overlay{
+    color: black;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    width: 100%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  .arrow-container{
+    display: flex;
+    flex-direction: row;
+  }
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  .wide-flex{
+    display: flex;
+    flex-direction: row;
+  }
+  .leader-container:hover .wide-flex{
+    visibility:hidden;
+  }
+{% endblock %}
+
+{% block title_content %} Stocks {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('index')}}"'>
+  Home
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('portfolio')}}"'>Portfolio</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+<div class='wide-flex'>
+  <form action="{{url_for('stocks')}}" method="post">
+    <div class='wide-flex'>
+    <input name='start' value='0' style='visibility:hidden'>
+      <h2>Search Filters</h2>
+      <input type='number' step='1' min='1' name='end' placeholder='Number of Stocks on Page' required>
+    </div>
+    <p>Descending</p>
+    <label class="switch">
+      <input type="checkbox" name="high" value='1' checked>
+      <span class="slider round"></span>
+    </label>
+    <h3>Only tick one</h3>
+    <div class="wide-flex">
+      <p>Capitalization</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='capitalization'>
+        <span class="slider round"></span>
+      </label>
+      <p>Beta</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='beta'>
+        <span class="slider round"></span>
+      </label>
+      <p>EPS</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='trailingEPS'>
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div class='wide-flex'>
+      <p>Forward EPS</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='forwardEPS'>
+        <span class="slider round"></span>
+      </label>
+      <p>P/E</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='trailingPE'>
+        <span class="slider round"></span>
+      </label>
+      <p>Forward P/E</p>
+      <label class="switch">
+        <input type="checkbox" name="param" value='forwardPE'>
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <input type='text' name='search' placeholder='Name of Stock'>
+    <input type="submit">
+  </form>
+  </div>
+  <br>
+  <div class='leaderboard-container'>
+    <h2>STOCK LIST</h2>
+    <div class='leaderboard-overlay'>
+      <table style = 'width: 100%'>
+            <tr>
+              <th>Stock Name</th>
+              <th>Ask Price</th>
+              <th>Forward EPS</th>
+              <th>Forward PE</th>
+              {% if param not in ['forwardEPS','forwardPE','stockName'] %}
+              <th>{{names[param]}}</th>
+              {% endif %}
+            </tr>
+            {% for stock in stocks %}
+            <tr>
+              <td onclick='location.href= "{{url_for('stock', stock_symbol=stock['Stock Symbol'])}}"'>{{stock['Stock Name']}}</td>
+              <td>{{stock['Ask Price']}}</td>
+              <td>{{stock['Forward EPS']}}</td>
+              <td>{{stock['Forward PE']}}</td>
+              {% if param not in ['forwardEPS','forwardPE','stockName'] %}
+              <td>{{stock['Param']}}</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+      </table>
+      {% if param %}
+      <div class='arrow-container'>
+      {% if start!=0 %}
+      <form action='{{url_for("stocks")}}' method="post">
+        <input name='start' value={{start-(end-start)}} style='visibility:hidden'>
+        <input name='end' value={{end-(end-start)}} style='visibility:hidden'>
+        <input name='param' value={{param}} style='visibility:hidden'>
+        <input name='high' value={{high}} style='visibility:hidden'>
+        <input name='search' type="hidden" value={{search}}>
+        <input type='submit' value='<'>
+      </form>
+      {% endif %} 
+      <form action='{{url_for("stocks")}}' method="post">
+        <input name='start' value={{end}} style='visibility:hidden'>
+        <input name='end' value={{end+(end-start)}} style='visibility:hidden'>
+        <input name='param' value={{param}} style='visibility:hidden'>
+        <input name='high' value={{high}} style='visibility:hidden'>
+        <input name='search' type='hidden' value={{search}}>
+        <input type='submit' value='>'>
+      </form> 
+      </div>
+      {% endif %}     
+    </div>
+  </div>
+{% endblock %}
+{% block script_content %}
+{% endblock %}
+

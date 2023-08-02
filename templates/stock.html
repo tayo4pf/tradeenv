@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  .simple-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .simple-item{
+    width: 50%;
+    transition: 0.8s;
+  }
+  .simple-item:hover {
+    color: black;
+    background-color: white;
+  }
+  .pointer:hover {
+    cursor: pointer;
+  }
+  .top-button-container{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .top-button{
+    width: 40%;
+    transition: 0.8s;
+    background-color: black;
+    font-family: consolas;
+  }
+  .top-button:hover {
+    background-color: rgb(54, 255, 47);
+    flex-grow:1.5;
+  }
+{% endblock %}
+
+{% block title_content %} {{stock['Stock Symbol']}} {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('index')}}"'>
+  Home
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('portfolio')}}"'>Portfolio</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  {% if stock['Website']!=None %}
+  <h1 class='topBanner' onclick='location.href= "{{stock['Website']}}"' target="_blank" class='pointer'>{{stock['Stock Symbol']}}</h1>
+  {% endif %}
+  <div class='top-button-container'>
+    <div class='top-button' onclick='location.href="{{url_for('track', stock_symbol=stock['Stock Symbol'])}}"'>Track</div>
+    <div class='top-button' onclick='location.href="{{url_for('define_purchase', stock_symbol=stock['Stock Symbol'], error_type='b')}}"'>Buy Shares</div>
+  </div>
+  <div>{{stock['Stock Name']}} {{stock['Ask Price']}} Last Updated: {{stock['Last Updated']}}</div>
+  <br>
+  {% if sdsPE != None and sdsPE >= 0 %}
+  <p style="color:green">{{sdsPE}} standard deviations above the mean for P/E in sector</p>
+  {% endif %}
+  {% if sdsPE != None and sdsPE < 0 %}
+  <p style="color:red">{{sdsPE}} standard deviations below the mean for P/E in sector</p>
+  {% endif %}
+  {% if sdsFPE != None and sdsFPE >= 0 %}
+  <p style="color:green">{{sdsFPE}} standard deviations above the mean for Forward P/E in sector</p>
+  {% endif %}
+  {% if sdsFPE != None and sdsFPE < 0 %}
+  <p style="color:red">{{sdsFPE}} standard deviations below the mean for Forward P/E in sector</p>
+  {% endif %}
+  <div class='simple-container'>
+    <table class='simple-item'>
+      <tr>
+        <td>Day High</td>
+        <td>Day Low</td>
+      </tr>
+      <tr>
+        <td>{{stock['Daily High']}}</td>
+        <td>{{stock['Daily Low']}}</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>Ask Price</td>
+        <td>{{stock['Ask Price']}}</td>
+      </tr>
+      <tr>
+        <td>Bid Price</td>
+        <td>{{stock['Bid Price']}}</td>
+      </tr>
+      <tr>
+        <td>Previous Close</td>
+        <td>{{stock['Previous Close']}}</td>
+      </tr>
+      <tr>
+        <td>Open</td>
+        <td>{{stock['Open Price']}}</td>
+      </tr>
+      <tr>
+        <td>Volume</td>
+        <td>{{stock['Volume']}}</td>
+      </tr>
+      <tr>
+        <td>Avg Volume</td>
+        <td>{{stock['Avg Volume']}}</td>
+      </tr>
+    </table>
+    <div style='padding: 1%' class='simple-item'>{{stock['Summary']}}</div>
+  </div>
+  <div class='simple-container'>
+    <table class='simple-item'>
+      <tr>
+        <td>Capitalization</td>
+        <td>{{stock['Capitalization']}}</td>
+      </tr>
+      <tr>
+        <td>52-Week Range</td>
+        <td>{{stock['52 Week Low']}} - {{stock['52 Week High']}}</td>
+      </tr>
+      <tr>
+        <td>Beta</td>
+        <td>{{stock['Beta']}}</td>
+      </tr>
+      <tr>
+        <td>Dividend(Dividend Yield)</td>
+        <td>{% if stock['Dividend'] %}{{stock['Dividend']}}%{% else %}N/A{% endif %}
+          ({% if stock['5 Yr Dividend'] %}{{stock['5 Yr Dividend']}}%{% else %}N/A{% endif %})</td>
+      </tr>
+      <tr>
+        <td>Trailing Earnings per Share</td>
+        <td>{{stock['Trailing EPS']}}</td>
+      </tr>
+      <tr>
+        <td>Forward Earnings per Share</td>
+        <td>{{stock['Forward EPS']}}</td>
+      </tr>
+      <tr>
+        <td>Trailing Price/Earnings</td>
+        <td>{{stock['Trailing PE']}}</td>
+      </tr>
+      <tr>
+        <td>Forward Price/Earnings</td>
+        <td>{{stock['Forward PE']}}</td>
+      </tr>
+    </table>
+    <table class='simple-item'>
+      <tr>
+        <th>Sectors:</th>
+      </tr>
+      {% for sector in stock['Sectors'] %}
+      <tr>
+        <td>{{sector}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+{% endblock %}
+{% block script_content %}
+{% endblock %}
+

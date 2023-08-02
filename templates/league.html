@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  .portfolio-body{
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    width: 100%;
+    border-width: 2px;
+    border-color: white;
+    justify-content: center;
+  }
+  .portfolio-banner{
+    font-family: consolas;
+    background-color: black;
+    color: grey;
+    transition: 1.4s;
+    width: 60%;
+    padding: 15px;
+    font-size: 112%;
+    border: none;
+    min-width: 20%;
+  }
+  .portfolio-banner:hover{
+    color: white;
+    background-color: rgb(54, 255, 47);
+    flex-grow: 2;
+  }
+{% endblock %}
+
+{% block title_content %} leagues {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('index')}}"'>
+  Home
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('stocks')}}"'>Stocks</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  <div class='portfolio-body'>
+    <button type="button" class='portfolio-banner' onclick='location.href="{{url_for('portfolio')}}"'>Portfolio</button>
+  </div>
+  <h1>{{league}}</h1>
+  <table>
+    <tr>
+      <th>Username</th>
+      <th>Balance</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+      <td>{{user['Username']}}</td>
+      <td>{{user['Balance']}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+{% block script_content %}
+{% endblock %}
+

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  form{
+    display: flex;
+    flex-direction: column;
+    padding:0;
+    width: 100%;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+{% endblock %}
+
+{% block title_content %} Preferences {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+{% endblock %}
+{% block body_content %}
+  <h1 class='topBanner'>PREFERENCES</h1>
+  <h3>What types of stocks do you have interest in?</h3>
+  <form action="{{url_for('preferences')}}" method="post">
+    <h1>High Capitalization Stocks</h1>
+    <h3>This is the total value of the outstanding shares of a stock.</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_cap" checked>
+      <span class="slider round"></span>
+    </label>
+    <h1>High Beta Stocks</h1>
+    <h3>Beta is a measurement of how volatile a stock is. The higher the beta, the more extreme price fluctuation is. These are less predictable.</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_beta">
+      <span class="slider round"></span>
+    </label>
+    <h1>Low Beta Stocks</h1>
+    <h3>Beta is a measurement of how volatile a stock is. The lower the beta, the less extreme price fluctuation is. These are more predictable.</h3>
+    <label class="switch">
+      <input type="checkbox" name="low_beta">
+      <span class="slider round"></span>
+    </label>
+    <h1>High EPS Stocks</h1>
+    <h3>EPS means earnings per share. It is calculated as a companies profits divided by the amount of outstanding shares of its stock</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_eps">
+      <span class="slider round"></span>
+    </label>
+    <h1>High Forward EPS Stocks</h1>
+    <h3>Forward EPS is the expected EPS for a stock during this quarter.</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_feps">
+      <span class="slider round"></span>
+    </label>
+    <h1>High P/E Stocks</h1>
+    <h3>P/E means price-earnings ratio. This is the share price divided by earnings per share. It indicates how profitable a share is.</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_pe">
+      <span class="slider round"></span>
+    </label>
+    <h1>High Forward P/E Stocks</h1>
+    <h3>Foward P/E is the expected P/E for a stock during this quarter</h3>
+    <label class="switch">
+      <input type="checkbox" name="high_fpe">
+      <span class="slider round"></span>
+    </label>
+    <input type="submit">
+  </form>
+{% endblock %}
+{% block script_content %}
+  function cookie(){
+    document.getElementById('cookie-pop-up').style.visibility = 'hidden';
+  }
+{% endblock %}
+

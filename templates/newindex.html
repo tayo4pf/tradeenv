@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  #cookie-pop-up{
+    visibility: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width : 15%;
+    position: fixed;
+    height: 15%;
+    bottom: 5%;
+    right: 5%;
+    border: solid white;
+    border-radius: 0%;
+    background-color: white;
+    color: grey;
+    padding: 1%;
+  }
+  #cookie-pop-up .cookie-button-container{
+    visibility: inherit;
+    display: flex;
+    flex-direction: row;
+  }
+  #cookie-pop-up .cookie-button{
+    visibility: inherit;
+    color: white;
+    min-width: 30%;
+    height: 30px;
+    border-radius: 0px;
+    border: none;
+    background-color: rgb(0, 0, 0);
+    transition: 1.4s;
+  }
+  #cookie-pop-up .cookie-button:hover{
+    background-color: rgb(54,255,47);
+    flex-grow: 1.5;
+  }
+  .leaderboard-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    transition: .5s ease;
+  }
+  leaderboard-container:hover{
+    height: 40px;
+  }
+  .leaderboard-container:hover .leaderboard-overlay{
+    height: 100%;
+  }
+  .leaderboard-overlay{
+    color: black;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    width: 100%;
+    height: 0%;
+    transition: .5s ease;
+  }
+{% endblock %}
+
+{% block title_content %} TradeEnv {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('stocks')}}"'>
+  Stocks
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  <h1 class='topBanner' onclick="location.href='{{url_for("register")}}'">JOIN TRADEENV</h1>
+  {% if False %}
+    <div id='cookie-pop-up'>
+      <div>Would you like us to store cookies?</div>
+      <form class='cookie-button-container' action="{{ url_for('index')}}" method="POST" target='_self'>
+        <input type='submit' id='yesToCookie' class='cookie-button' onclick='cookie()' value='Yes'></button>
+        <button type='button' id= 'noToCookie' class='cookie-button' onclick='cookie()' value='No'>No</button>
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}
+{% block script_content %}
+  function cookie(){
+    document.getElementById('cookie-pop-up').style.visibility = 'hidden';
+  }
+{% endblock %}
+

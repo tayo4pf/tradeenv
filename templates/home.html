@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  #cookie-pop-up{
+    visibility: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width : 15%;
+    position: fixed;
+    height: 15%;
+    bottom: 5%;
+    right: 5%;
+    border: solid white;
+    border-radius: 0%;
+    background-color: white;
+    color: grey;
+    padding: 1%;
+  }
+  #cookie-pop-up .cookie-button-container{
+    visibility: inherit;
+    display: flex;
+    flex-direction: row;
+  }
+  #cookie-pop-up .cookie-button{
+    visibility: inherit;
+    color: white;
+    min-width: 30%;
+    height: 30px;
+    border-radius: 0px;
+    border: none;
+    background-color: rgb(0, 0, 0);
+    transition: 1.4s;
+  }
+  #cookie-pop-up .cookie-button:hover{
+    background-color: rgb(54,255,47);
+    flex-grow: 1.5;
+  }
+  .leaderboard-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    transition: .5s ease;
+  }
+  leaderboard-container:hover{
+    height: 40px;
+  }
+  .leaderboard-container:hover .leaderboard-overlay{
+    height: 100%;
+  }
+  .leaderboard-overlay{
+    color: black;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    width: 100%;
+    height: 0%;
+    transition: .5s ease;
+  }
+{% endblock %}
+
+{% block title_content %} TradeEnv {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('stocks')}}"'>
+  Stocks
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('portfolio')}}"'>Portfolio</button>
+<button type="button" class="header" onclick='location.href= "{{url_for('friends')}}"'>
+  Friends
+</button>
+<button type="button" class="header" onclick='location.href= "{{url_for('leagues')}}"'>
+  Leagues
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  <h1 class='topBanner'>WELCOME TO TRADEENV, {{user['Username']}}</h1>
+  <h2 class='topBanner'>{{user['Recent Action']}}</h2>
+  {% for board in boards %}
+  <h2>{{board['Param']}} Stocks</h2>
+  <table style="width:100%">
+    <tr>
+      <th>Stock Name</th>
+      <th>Ask Price</th>
+      <th>{{board['Param'][4:]}}</th>
+    </tr>
+    {% for stock in board['List'] %}
+    <tr>
+      <td onclick='location.href ="{{url_for('stock',stock_symbol=stock['Stock Symbol'])}}"'>{{stock['Stock Name']}}</td>
+      <td>{{stock['Ask Price']}}</td>
+      <td>{{stock['Parameter']}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endfor %}
+{% endblock %}
+{% block script_content %}
+  function cookie(){
+    document.getElementById('cookie-pop-up').style.visibility = 'hidden';
+  }
+{% endblock %}
+

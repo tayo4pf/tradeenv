@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block style_content %}
+  .simple-content{
+    self-align: center;
+  }
+  .purchase-form{
+    self-align: center;
+    align-content: center;
+  }
+{% endblock %}
+
+{% block title_content %} SELL {{stock['Stock Symbol']}} {% endblock %}
+
+{% block body %} class='page' {% endblock %}
+
+{% block header %} class='header-body' {%  endblock %}
+{% block header_content %}
+<button type='button' class='header' onclick='location.href= "{{url_for('register')}}"'>
+  Register
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('index')}}"'>
+  Home
+</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('portfolio')}}"'>Portfolio</button>
+<button type="button" class='header' onclick='location.href= "{{url_for('login')}}"'>
+  Log In
+</button>
+{% endblock %}
+{% block body_content %}
+  <h1 class='topBanner' onclick='location.href= "{{stock['Website']}}"' target='_blank' class='pointer'>{{stock['Stock Symbol']}}</h1>
+  <div class='simple-content'>{{stock['Stock Symbol']}}</div>
+  <br>
+  <div>Highest Bid: {{stock['Bid Price']}}</div>
+  <div>the sell will be performed based on updated prices</div>
+  <div style='color:rgb(54, 255, 47)' class='simple-content'>all currency in usd</div>
+  <form class='sell-form' action="{{url_for('check_sell', stock_symbol=stock['Stock Symbol'], balance = balance, bid = stock['Bid Price'])}}" method='post'>
+    <div>Your balance: {{balance}}</div>
+    <br>
+    <label for='shares'>How many shares would you like to sell?</label>
+    <input type='number' step='1' min='1' placeholder="Amount To Be Sold" id='shares' name='shares' required>
+    <p style='color:red'>{{error}}</p>
+    <br>
+    <input type='submit' value='Attempt Sell'>
+  </form>
+{% endblock %}
+{% block script_content %}
+{% endblock %}
+
